@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Year Gift</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle,#3b2f1c,#000);
+  font-family:Arial,sans-serif;
+  overflow:hidden;
+}
+
+.gift-box{
+  width:220px;
+  height:220px;
+  background:#d4af37;
+  border-radius:20px;
+  box-shadow:0 0 30px rgba(255,215,0,0.8);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  animation:pulse 1.5s infinite;
+}
+
+.gift-box span{
+  font-size:20px;
+  font-weight:bold;
+  color:#1c1c1c;
+  text-align:center;
+}
+
+.card{
+  display:none;
+  background:#fff8e1;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  max-width:330px;
+  box-shadow:0 0 40px rgba(255,215,0,0.9);
+  animation:zoom 0.8s ease;
+  z-index:10;
+}
+
+.card h2{
+  color:#b8860b;
+  margin-bottom:15px;
+}
+
+.card p{
+  font-size:15px;
+  line-height:1.6;
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:1;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+  100%{transform:scale(1)}
+}
+
+@keyframes zoom{
+  from{transform:scale(0.5);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="gift-box" id="gift" onclick="openGift()">
+  <span>🎁 Tap to Open 🎁</span>
+</div>
+
+<div class="card" id="card">
+  <h2>👑 Queen Ankita 👑</h2>
+  <p>
+    Happy New Year 2026 sabse pehle aapko aur aapke pure pariwar 😊 ko  
+    <br><br>
+    Naye saal ki hardik shubhkamnaye ✨  
+    <br><br>
+    💖 Happy New Year 💖
+  </p>
+</div>
+
+<!-- Background Music -->
+<audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1c95b1a2a5.mp3?filename=happy-new-year-116257.mp3"></audio>
+
+<script>
+function openGift(){
+  document.getElementById("gift").style.display="none";
+  document.getElementById("card").style.display="block";
+  document.getElementById("music").play();
+  startFireworks();
+}
+
+/* Fireworks Animation */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function startFireworks(){
+  setInterval(()=>{
+    for(let i=0;i<50;i++){
+      particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height/2,
+        dx:(Math.random()-0.5)*6,
+        dy:(Math.random()-0.5)*6,
+        life:100,
+        color:`hsl(${Math.random()*360},100%,60%)`
+      });
+    }
+  },800);
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,i)=>{
+    p.x+=p.dx;
+    p.y+=p.dy;
+    p.life--;
+    ctx.fillStyle=p.color;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,3,0,Math.PI*2);
+    ctx.fill();
+    if(p.life<=0) particles.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
